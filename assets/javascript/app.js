@@ -18,25 +18,25 @@ $(document).ready(function(){
     var destination;
     var trainTime;
     var frequency;
+    
+    var trainTimeConverted;
     var minutesAway;
 
     // End Global Variables
 
+    // Submit button click function
     $("#submitBtn").on("click", function(evt){
         evt.preventDefault();
         trainName = $("#trainName").val().trim();
         destination = $("#destination").val().trim();
         trainTime = $("#time").val().trim();
         frequency = $("#frequency").val().trim();
-        // console.log(trainName)
-        // console.log(destination)
-        // console.log(trainTime)
-        // console.log(frequency)
+        console.log(trainName, destination, trainTime, frequency);
 
         // Calculating "Next Arrival" and "Minutes Avay"
-        firstTimeConverted = moment(trainTime, "hh:mm").subtract(1, "years");
+        trainTimeConverted = moment(trainTime, "hh:mm").subtract(1, "years");
         currentTime = moment();
-        diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+        diffTime = moment().diff(moment(trainTimeConverted), "minutes");
         tRemainder = diffTime % frequency;
         minutesAway = frequency - tRemainder;
         nextTrain = moment().add(minutesAway, "minutes");
@@ -51,5 +51,26 @@ $(document).ready(function(){
             nextTrainFormatted: nextTrainFormatted,
             minutesAway: minutesAway
         })
+
+        // Place user inputs into the table
+        // Creates new td tags to place user inputs in
+        var tableBody = $("tbody");
+        var tableRow = $("<tr>");
+        // td will be our cells
+        var tdTrainName = $("<td>").text(trainName)
+        var tdDestination = $("<td>").text(destination)
+        var tdTime = $("<td>").text(trainTime)
+        var tdFrequency = $("<td>").text(frequency)
+        tableRow.append(tdTrainName, tdDestination, tdFrequency, tdTime );
+        tableBody.append(tableRow);
+    })
+
+    database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
+        console.log(snapshot.val());
+        // Create a new date object
+        newStartDate = new Date(snapshot.val().StartDate);
+        monthsWorked = diff_months(newStartDate)
+        totalBilled = monthsWorked * snapshot.val().MonthlyRate;
+
     })
 })
