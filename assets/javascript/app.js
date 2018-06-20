@@ -18,6 +18,38 @@ $(document).ready(function(){
     var destination;
     var trainTime;
     var frequency;
-    
+    var minutesAway;
+
     // End Global Variables
+
+    $("#submitBtn").on("click", function(evt){
+        evt.preventDefault();
+        trainName = $("#trainName").val().trim();
+        destination = $("#destination").val().trim();
+        trainTime = $("#time").val().trim();
+        frequency = $("#frequency").val().trim();
+        // console.log(trainName)
+        // console.log(destination)
+        // console.log(trainTime)
+        // console.log(frequency)
+
+        // Calculating "Next Arrival" and "Minutes Avay"
+        firstTimeConverted = moment(trainTime, "hh:mm").subtract(1, "years");
+        currentTime = moment();
+        diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+        tRemainder = diffTime % frequency;
+        minutesAway = frequency - tRemainder;
+        nextTrain = moment().add(minutesAway, "minutes");
+        nextTrainFormatted = moment(nextTrain).format("hh:mm A");
+
+        // Pushing the values to the database
+        database.ref().push({
+            trainName: trainName,
+            destination: destination,
+            firstTrainTime: trainName,
+            frequency: frequency,
+            nextTrainFormatted: nextTrainFormatted,
+            minutesAway: minutesAway
+        })
+    })
 })

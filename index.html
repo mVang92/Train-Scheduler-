@@ -26,7 +26,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Train Name</th>
-                        <th scope="col">Desination</th>
+                        <th scope="col">Destination</th>
                         <th scope="col">Frequency (min)</th>
                         <th scope="col">Next Arrival</th>
                         <th scope="col">Minutes Away</th>
@@ -48,19 +48,19 @@
                         <form>
                             <div class="form-group">
                                 <label for="trainName">Train Name</label>
-                                <input class="form-control" id="trainName" type="text">
+                                <input required class="form-control" id="trainName" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="destination">Destination</label>
-                                <input class="form-control" id="destination" type="text">
+                                <input required class="form-control" id="destination" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="time">Time</label>
-                                <input class="form-control" id="time" type="text">
+                                <input required class="form-control" id="time" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="frequency">Frequency</label>
-                                <input class="form-control" id="frequency" type="number">
+                                <input required class="form-control" id="frequency" type="number">
                             </div>
                             <button class="btn btn-primary" id="submitBtn" type="submit">Submit</button>
                         </form>
@@ -69,6 +69,6 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="assets/javascript/app.js"></script>
 </body>
-
 </html>
