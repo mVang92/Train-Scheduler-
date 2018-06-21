@@ -1,3 +1,17 @@
+// Global Variables
+var trainName;
+var destination;
+var trainTime;
+var frequency;
+var nextTrain;
+
+var trainTimeConverted;
+var minutesAway;
+var diffTime;
+var tRemainder;
+var nextTrainFormatted;
+// End Global Variables
+
 $(document).ready(function(){
     // Firebase database
     var config = {
@@ -12,17 +26,6 @@ $(document).ready(function(){
     firebase.initializeApp(config);
 
     var database = firebase.database();
-
-    // Global Variables
-    var trainName;
-    var destination;
-    var trainTime;
-    var frequency;
-    
-    var trainTimeConverted;
-    var minutesAway;
-
-    // End Global Variables
 
     // Submit button click function
     $("#submitBtn").on("click", function(evt){
@@ -52,29 +55,40 @@ $(document).ready(function(){
             minutesAway: minutesAway
         })
 
-        // Place user inputs into the table
-        // Creates new td tags to place user inputs in
-        var tableBody = $("tbody");
-        var tableRow = $("<tr>");
-        // td will be our cells
-        var tdTrainName = $("<td>").text(trainName)
-        var tdDestination = $("<td>").text(destination)
-        var tdTime = $("<td>").text(trainTime)
-        var tdFrequency = $("<td>").text(frequency)
-        tableRow.append(tdTrainName, tdDestination, tdFrequency, tdTime );
-        tableBody.append(tableRow);
+        $("#trainName").val("");
+        $("#destination").val("");
+        $("#time").val("");
+        $("#frequency").val("");
     })
 
-    database.ref().orderByChild("dateAdded").limitToLast(3).on("child_added", function (snapshot) {
+    database.ref().orderByChild("dateAdded").limitToLast(5).on("child_added", function (snapshot) {
         // console.log(snapshot.val());
         var tableBody = $("tbody");
         var tableRow = $("<tr>");
+        var minFrequency;
+        var minAway;
+
+        if (snapshot.val().frequency <= 1){
+            minFrequency = "minute"
+        } else {
+            minFrequency = "minutes"
+        }
+
+        if (snapshot.val().minutesAway <= 1){
+            minAway = "minute"
+        } else {
+            minAway = "minutes"
+        }
+        
+        // Place user inputs into the table
+        // Creates new td tags to place user inputs in
         // td will be our cells
         var tdTrainName = $("<td>").text(snapshot.val().trainName);
-        var tdDestination = $("<td>").text(snapshot.val().destination)
-        var tdTime = $("<td>").text(snapshot.val().trainTime)
-        var tdFrequency = $("<td>").text(snapshot.val().frequency)
-        tableRow.append(tdTrainName, tdDestination, tdFrequency, tdTime );
+        var tdDestination = $("<td>").text(snapshot.val().destination);
+        var tdFrequency = $("<td>").text(snapshot.val().frequency + " " + minFrequency);
+        var tdNextTrain = $("<td>").text(snapshot.val().nextTrainFormatted);
+        var tdMinutesAway = $("<td>").text(snapshot.val().minutesAway + " " + minAway);
+        tableRow.append(tdTrainName, tdDestination, tdFrequency, tdNextTrain, tdMinutesAway);
         tableBody.append(tableRow);
     })
 })
