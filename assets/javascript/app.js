@@ -46,7 +46,7 @@ $(document).ready(function(){
         database.ref().push({
             trainName: trainName,
             destination: destination,
-            firstTrainTime: trainName,
+            trainTime: trainTime,
             frequency: frequency,
             nextTrainFormatted: nextTrainFormatted,
             minutesAway: minutesAway
@@ -65,12 +65,16 @@ $(document).ready(function(){
         tableBody.append(tableRow);
     })
 
-    database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
-        console.log(snapshot.val());
-        // Create a new date object
-        newStartDate = new Date(snapshot.val().StartDate);
-        monthsWorked = diff_months(newStartDate)
-        totalBilled = monthsWorked * snapshot.val().MonthlyRate;
-
+    database.ref().orderByChild("dateAdded").limitToLast(3).on("child_added", function (snapshot) {
+        // console.log(snapshot.val());
+        var tableBody = $("tbody");
+        var tableRow = $("<tr>");
+        // td will be our cells
+        var tdTrainName = $("<td>").text(snapshot.val().trainName);
+        var tdDestination = $("<td>").text(snapshot.val().destination)
+        var tdTime = $("<td>").text(snapshot.val().trainTime)
+        var tdFrequency = $("<td>").text(snapshot.val().frequency)
+        tableRow.append(tdTrainName, tdDestination, tdFrequency, tdTime );
+        tableBody.append(tableRow);
     })
 })
