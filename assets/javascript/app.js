@@ -4,7 +4,6 @@ var destination;
 var trainTime;
 var frequency;
 var nextTrain;
-
 var trainTimeConverted;
 var minutesAway;
 var diffTime;
@@ -34,7 +33,7 @@ $(document).ready(function(){
         destination = $("#destination").val().trim();
         trainTime = $("#time").val().trim();
         frequency = $("#frequency").val().trim();
-        console.log(trainName, destination, trainTime, frequency);
+        // console.log(trainName, destination, trainTime, frequency);
 
         // Calculating "Next Arrival" and "Minutes Avay"
         trainTimeConverted = moment(trainTime, "hh:mm").subtract(1, "years");
@@ -61,7 +60,7 @@ $(document).ready(function(){
         $("#frequency").val("");
     })
 
-    database.ref().orderByChild("dateAdded").limitToLast(5).on("child_added", function (snapshot) {
+    database.ref().orderByChild("dateAdded").limitToLast(7).on("child_added", function (snapshot) {
         // console.log(snapshot.val());
         var tableBody = $("tbody");
         var tableRow = $("<tr>");
